@@ -15,31 +15,37 @@ Türkiye'nin muhteşem turistik yerlerini keşfetmek için geliştirilmiş moder
 ## 🛠️ Teknoloji Stack
 
 ### Frontend
+
 - **React Native 0.80.2** - Cross-platform mobil framework
 - **TypeScript** - Type-safe geliştirme
 - **Tamagui** - Modern UI library ve custom theme
 - **React Navigation 6** - Tab + Stack + Drawer navigation
 
 ### State Management
+
 - **Zustand** - Hafif ve performanslı state management
 - **React Query** - Server state ve cache yönetimi
 
 ### Veritabanı & Backend
+
 - **Supabase** - Backend-as-a-Service
 - **SQLite** - Offline veri storage
 - **React Native Async Storage** - Local preferences
 
 ### Harita & Konum
+
 - **OpenStreetMap** - Açık kaynak harita servisi
 - **MapLibre/Mapbox GL** - Harita render engine
 - **React Native Geolocation** - Konum servisleri
 
 ### Authentication & Security
+
 - **Supabase Auth** - Email/Password, Social login
 - **React Native Keychain** - Güvenli key storage
 - **React Native Biometrics** - Parmak izi/Face ID
 
 ### Analytics & Monitoring
+
 - **Firebase Analytics** - Kullanıcı analizi
 - **Firebase Crashlytics** - Crash reporting
 
@@ -67,6 +73,7 @@ TravelTurkey/
 ## 🚀 Kurulum ve Çalıştırma
 
 ### Gereksinimler
+
 - Node.js (>=18)
 - React Native CLI
 - Android Studio + SDK
@@ -74,17 +81,20 @@ TravelTurkey/
 - Git
 
 ### Projeyi Klonlayın
+
 ```bash
 git clone https://github.com/travelturkey/mobile-app.git
 cd TravelTurkey
 ```
 
 ### Bağımlılıkları Yükleyin
+
 ```bash
 npm install --legacy-peer-deps
 ```
 
 ### Android için Çalıştırın
+
 ```bash
 # Metro bundler'ı başlatın (terminal 1)
 npx react-native start
@@ -98,12 +108,14 @@ npx react-native run-android
 TravelTurkey, Türk kültürüne uygun özel bir renk paleti kullanır:
 
 ### Ana Renkler
+
 - **Primary**: `#D62828` - Türk kırmızısının soft versiyonu
 - **Secondary**: `#264653` - Osmanlı lacivertinin pastel tonu
 - **Accent Gold**: `#E9C46A` - Modern pastel altın
 - **Accent Mint**: `#2A9D8F` - Fresh mint yeşil
 
 ### Temalar
+
 - **Light Mode**: Temiz, aydınlık tasarım
 - **Dark Mode**: Göz yormaayan koyu tasarım
 - **System**: Cihaz temasını takip eder
@@ -123,10 +135,12 @@ RootStack
 ## 📚 State Management
 
 ### Zustand Stores
+
 - **AppStore**: Kullanıcı durumu, kimlik doğrulama, tercihler
 - **UIStore**: UI state'leri, modal kontrolleri, geçici veriler
 
 ### React Query
+
 - API çağrıları için cache ve server state yönetimi
 - Offline-first yaklaşım için optimistic updates
 
@@ -139,6 +153,7 @@ RootStack
 ## 📱 Development Workflow
 
 ### Hot Reload & Fast Refresh
+
 ```bash
 # Metro bundler ile hot reload
 npx react-native start
@@ -150,6 +165,7 @@ npx react-native run-android
 ```
 
 ### Code Quality
+
 ```bash
 # Linting
 npm run lint
