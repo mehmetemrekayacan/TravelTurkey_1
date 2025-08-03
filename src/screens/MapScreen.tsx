@@ -27,15 +27,10 @@ const MapScreen: React.FC = () => {
 
   // Store'dan gelen selectedLocationId değiştiğinde local state'i güncelle
   useEffect(() => {
-    console.log(
-      'MapScreen: selectedLocationIdFromStore changed to:',
-      selectedLocationIdFromStore,
-    );
     setSelectedLocationId(selectedLocationIdFromStore);
   }, [selectedLocationIdFromStore]);
 
   const handleLocationPress = (location: Location) => {
-    console.log('MapScreen: Setting selected location to:', location.id);
     setSelectedLocationId(location.id);
     setSelectedLocation(location.id); // Store'u da güncelle
   };

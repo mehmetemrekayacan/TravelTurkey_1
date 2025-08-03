@@ -11,7 +11,7 @@ const FavoritesScreen: React.FC = () => {
   const isDark = preferences.theme === 'dark';
 
   const { setCurrentScreen, setSelectedLocation } = useUIStore();
-  const { favoriteLocations, toggleFavorite } = useFavoritesStore();
+  const { favoriteLocations, toggleFavorite, isFavorite } = useFavoritesStore();
 
   const handleLocationPress = (locationId: string) => {
     setSelectedLocation(locationId);
@@ -48,14 +48,22 @@ const FavoritesScreen: React.FC = () => {
 
       {favoriteLocations.length > 0 ? (
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {favoriteLocations.map(location => (
-            <LocationCard
-              key={location.id}
-              location={location}
-              onPress={() => handleLocationPress(location.id)}
-              onFavoritePress={() => handleFavoriteToggle(location.id)}
-            />
-          ))}
+          {favoriteLocations.map(location => {
+            // Favori durumunu store'dan al
+            const locationWithFavorite = {
+              ...location,
+              isFavorite: isFavorite(location.id),
+            };
+
+            return (
+              <LocationCard
+                key={location.id}
+                location={locationWithFavorite}
+                onPress={() => handleLocationPress(location.id)}
+                onFavoritePress={() => handleFavoriteToggle(location.id)}
+              />
+            );
+          })}
         </ScrollView>
       ) : (
         <View style={styles.emptyState}>

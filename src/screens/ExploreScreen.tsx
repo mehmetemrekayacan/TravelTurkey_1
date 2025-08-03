@@ -227,15 +227,23 @@ const ExploreScreen: React.FC = () => {
       >
         {filteredAndSortedLocations.length > 0 ? (
           <View style={styles.locationsGrid}>
-            {filteredAndSortedLocations.map(location => (
-              <LocationCard
-                key={location.id}
-                location={location}
-                onPress={() => handleLocationPress(location.id)}
-                onFavoritePress={() => handleFavoriteToggle(location.id)}
-                style={styles.locationCard}
-              />
-            ))}
+            {filteredAndSortedLocations.map(location => {
+              // Favori durumunu store'dan al
+              const locationWithFavorite = {
+                ...location,
+                isFavorite: isFavorite(location.id),
+              };
+
+              return (
+                <LocationCard
+                  key={location.id}
+                  location={locationWithFavorite}
+                  onPress={() => handleLocationPress(location.id)}
+                  onFavoritePress={() => handleFavoriteToggle(location.id)}
+                  style={styles.locationCard}
+                />
+              );
+            })}
           </View>
         ) : (
           <View style={styles.emptyState}>

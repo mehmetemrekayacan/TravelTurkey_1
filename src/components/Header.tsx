@@ -50,10 +50,8 @@ export const Header: React.FC<HeaderProps> = ({
   const handleMenu = () => {
     if (onMenuPress) {
       onMenuPress();
-    } else {
-      // Navigation functionality removed for compatibility
-      console.warn('Menu functionality disabled');
     }
+    // Navigation functionality removed for compatibility
   };
 
   const containerStyle: ViewStyle = {

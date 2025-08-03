@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ViewStyle,
   Dimensions,
+  Animated,
 } from 'react-native';
 import { usePreferences } from '../store';
 import { Location } from '../types';
@@ -33,6 +34,10 @@ export const LocationCard: React.FC<LocationCardProps> = ({
   const preferences = usePreferences();
   const isDark = preferences.theme === 'dark';
   const isCurrentLanguage = preferences.language;
+  
+  // Animation states
+  const [scaleAnim] = useState(new Animated.Value(1));
+  const [favoriteAnim] = useState(new Animated.Value(1));
 
   const getCardStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
@@ -219,11 +224,22 @@ const styles = StyleSheet.create({
   },
   favoriteButton: {
     position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 20,
-    padding: 6,
+    padding: 8,
+    minWidth: 36,
+    minHeight: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   categoryBadge: {
     position: 'absolute',

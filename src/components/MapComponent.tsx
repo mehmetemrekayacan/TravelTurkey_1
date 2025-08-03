@@ -27,8 +27,6 @@ export const MapComponent: React.FC<MapComponentProps> = ({
   locations = mockLocations,
   selectedLocationId,
   onLocationPress,
-  onDirectionsPress,
-  showUserLocation = true,
   style,
 }) => {
   const preferences = usePreferences();
@@ -50,11 +48,6 @@ export const MapComponent: React.FC<MapComponentProps> = ({
 
   // Focus on selected location when selectedLocationId changes
   useEffect(() => {
-    console.log(
-      'MapComponent: selectedLocationId changed to:',
-      selectedLocationId,
-    );
-
     // Force marker re-render
     setForceUpdate(prev => prev + 1);
 
@@ -62,7 +55,6 @@ export const MapComponent: React.FC<MapComponentProps> = ({
       const selectedLocation = locations.find(
         loc => loc.id === selectedLocationId,
       );
-      console.log('MapComponent: Found location:', selectedLocation?.name);
       if (selectedLocation) {
         const region = {
           latitude: selectedLocation.coordinates.latitude,
@@ -70,7 +62,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         };
-        console.log('MapComponent: Animating to region:', region);
+
 
         // MapView'ın hazır olması için kısa bir gecikme
         setTimeout(() => {
@@ -84,10 +76,8 @@ export const MapComponent: React.FC<MapComponentProps> = ({
 
   // Get current location
   const getCurrentLocation = useCallback(() => {
-    console.log('Getting current location...');
     Geolocation.getCurrentPosition(
       position => {
-        console.log('Location found:', position.coords);
         const { latitude, longitude } = position.coords;
         const newRegion = {
           latitude,
@@ -103,23 +93,23 @@ export const MapComponent: React.FC<MapComponentProps> = ({
         }
       },
       error => {
-        console.log('Location error details:', error);
+
         if (error.code === 1) {
-          console.log('Location permission denied by user');
+
           Alert.alert(
             'Konum İzni Gerekli',
             'Konumunuzu görmek için lütfen uygulama ayarlarından konum iznini açın.',
             [{ text: 'Tamam', style: 'default' }],
           );
         } else if (error.code === 2) {
-          console.log('Location unavailable');
+
           Alert.alert(
             'Konum Servisi Kapalı',
             'Telefonunuzun konum servisi kapalı görünüyor. Lütfen ayarlardan konumu açın.',
             [{ text: 'Tamam', style: 'default' }],
           );
         } else if (error.code === 3) {
-          console.log('Location timeout');
+
           Alert.alert(
             'Konum Bulunamadı',
             'Konum bilgisi alınamadı. İnternet bağlantınızı kontrol edin.',
@@ -148,7 +138,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
 
       if (fineLocationResult === RESULTS.GRANTED) {
         setLocationPermission(true);
-        console.log('Location permission granted');
+
         getCurrentLocation(); // İzin verildikten sonra konum al
       } else if (fineLocationResult === RESULTS.DENIED) {
         // COARSE location'ı dene
@@ -157,18 +147,18 @@ export const MapComponent: React.FC<MapComponentProps> = ({
         );
         if (coarseLocationResult === RESULTS.GRANTED) {
           setLocationPermission(true);
-          console.log('Coarse location permission granted');
+
           getCurrentLocation(); // İzin verildikten sonra konum al
         } else {
           setLocationPermission(false);
-          console.log('Location permissions denied');
+
         }
       } else {
         setLocationPermission(false);
-        console.log('Location permission result:', fineLocationResult);
+
       }
     } catch (error) {
-      console.log('Permission error:', error);
+
       setLocationPermission(false);
     } finally {
       setIsLoading(false);
@@ -186,7 +176,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           setLocationPermission(true);
         }
       } catch (error) {
-        console.log('Permission check error:', error);
+
       } finally {
         setIsLoading(false);
       }
@@ -215,7 +205,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
   const handleMarkerPress = useCallback(
     (location: Location) => {
       try {
-        console.log('Marker pressed:', location.name);
+
         if (onLocationPress && typeof onLocationPress === 'function') {
           onLocationPress(location);
         }

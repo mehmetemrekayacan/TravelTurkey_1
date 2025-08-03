@@ -6,19 +6,14 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Dimensions,
   StatusBar,
   Linking,
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { mockLocations } from '../data/locations';
 import { useUIStore, useSelectedLocationId } from '../store';
 import { useFavoritesStore } from '../store/favorites';
 
-const { width } = Dimensions.get('window');
-
 const LocationDetailScreen: React.FC = () => {
-  const { t } = useTranslation();
   const selectedLocationId = useSelectedLocationId();
   const { goBack, setCurrentScreen, setSelectedLocation, setCurrentTab } =
     useUIStore();
@@ -39,7 +34,6 @@ const LocationDetailScreen: React.FC = () => {
   };
 
   const handleMapPress = () => {
-    console.log('DetailScreen: Setting selected location to:', location.id);
     setSelectedLocation(location.id);
     setCurrentTab('Map'); // Map tab'ına geç
     setCurrentScreen('main'); // Main screen'e geç ki Map görünsün
@@ -49,26 +43,19 @@ const LocationDetailScreen: React.FC = () => {
     const { latitude, longitude } = location.coordinates;
     const locationName = encodeURIComponent(location.name);
 
-    // Android için Google Maps navigation URL (direkt navigation başlat)
-    const androidUrl = `google.navigation:q=${latitude},${longitude}&mode=d`;
-    const webUrl = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&destination_place_id=${locationName}&travelmode=driving`;
+    // Android için Google Maps URL (sadece yolu göster, navigation başlatma)
+    const androidUrl = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&destination_place_id=${locationName}&travelmode=driving`;
+
+    // iOS için de aynı URL
+    const iosUrl = `https://maps.google.com/maps?daddr=${latitude},${longitude}&ll=`;
 
     // Önce Google Maps uygulamasını dene
-    Linking.canOpenURL(androidUrl)
-      .then(supported => {
-        if (supported) {
-          Linking.openURL(androidUrl);
-        } else {
-          // Google Maps yoksa web tarayıcısında aç
-          Linking.openURL(webUrl).catch(err => {
-            console.error('Failed to open Google Maps:', err);
-          });
-        }
-      })
-      .catch(() => {
-        // Hata durumunda web URL'ini kullan
-        Linking.openURL(webUrl);
+    Linking.openURL(androidUrl).catch(() => {
+      // Google Maps yoksa iOS URL'ini dene
+      Linking.openURL(iosUrl).catch(err => {
+        console.error('Failed to open Google Maps:', err);
       });
+    });
   };
 
   return (
