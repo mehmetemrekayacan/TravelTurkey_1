@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
+  Linking,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { mockLocations } from '../data/locations';
@@ -19,7 +20,8 @@ const { width } = Dimensions.get('window');
 const LocationDetailScreen: React.FC = () => {
   const { t } = useTranslation();
   const selectedLocationId = useSelectedLocationId();
-  const { goBack } = useUIStore();
+  const { goBack, setCurrentScreen, setSelectedLocation, setCurrentTab } =
+    useUIStore();
   const { isFavorite, toggleFavorite } = useFavoritesStore();
 
   const location = mockLocations.find(loc => loc.id === selectedLocationId);
@@ -34,6 +36,39 @@ const LocationDetailScreen: React.FC = () => {
 
   const handleFavoritePress = () => {
     toggleFavorite(location);
+  };
+
+  const handleMapPress = () => {
+    console.log('DetailScreen: Setting selected location to:', location.id);
+    setSelectedLocation(location.id);
+    setCurrentTab('Map'); // Map tab'ına geç
+    setCurrentScreen('main'); // Main screen'e geç ki Map görünsün
+  };
+
+  const handleDirectionsPress = () => {
+    const { latitude, longitude } = location.coordinates;
+    const locationName = encodeURIComponent(location.name);
+
+    // Android için Google Maps navigation URL (direkt navigation başlat)
+    const androidUrl = `google.navigation:q=${latitude},${longitude}&mode=d`;
+    const webUrl = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&destination_place_id=${locationName}&travelmode=driving`;
+
+    // Önce Google Maps uygulamasını dene
+    Linking.canOpenURL(androidUrl)
+      .then(supported => {
+        if (supported) {
+          Linking.openURL(androidUrl);
+        } else {
+          // Google Maps yoksa web tarayıcısında aç
+          Linking.openURL(webUrl).catch(err => {
+            console.error('Failed to open Google Maps:', err);
+          });
+        }
+      })
+      .catch(() => {
+        // Hata durumunda web URL'ini kullan
+        Linking.openURL(webUrl);
+      });
   };
 
   return (
@@ -170,6 +205,25 @@ const LocationDetailScreen: React.FC = () => {
               />
             ))}
           </ScrollView>
+        </View>
+
+        {/* Map and Directions Buttons */}
+        <View style={styles.actionButtonsContainer}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={handleMapPress}
+          >
+            <Text style={styles.actionButtonIcon}>🗺️</Text>
+            <Text style={styles.actionButtonText}>Haritada Göster</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionButton, styles.directionsButton]}
+            onPress={handleDirectionsPress}
+          >
+            <Text style={styles.actionButtonIcon}>🧭</Text>
+            <Text style={styles.actionButtonText}>Yol Tarifi</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Bottom Spacing */}
@@ -363,6 +417,41 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 12,
     marginRight: 12,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    padding: 20,
+    gap: 12,
+  },
+  actionButton: {
+    flex: 1,
+    backgroundColor: '#2E7D32',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  directionsButton: {
+    backgroundColor: '#1976D2',
+  },
+  actionButtonIcon: {
+    fontSize: 18,
+    marginRight: 8,
+  },
+  actionButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
   bottomSpacing: {
     height: 100,
