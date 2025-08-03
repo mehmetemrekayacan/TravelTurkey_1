@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ViewStyle,
   Dimensions,
-  Animated,
 } from 'react-native';
 import { usePreferences } from '../store';
 import { Location } from '../types';
@@ -34,10 +33,6 @@ export const LocationCard: React.FC<LocationCardProps> = ({
   const preferences = usePreferences();
   const isDark = preferences.theme === 'dark';
   const isCurrentLanguage = preferences.language;
-  
-  // Animation states
-  const [scaleAnim] = useState(new Animated.Value(1));
-  const [favoriteAnim] = useState(new Animated.Value(1));
 
   const getCardStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
