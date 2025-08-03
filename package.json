@@ -23,6 +23,7 @@
     "react": "19.1.0",
     "react-i18next": "^13.5.0",
     "react-native": "0.80.2",
+    "react-native-config": "^1.5.5",
     "react-native-maps": "^1.24.13",
     "react-native-permissions": "^5.4.2",
     "zustand": "^4.4.7"
